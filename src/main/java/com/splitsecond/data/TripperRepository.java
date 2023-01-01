@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.UUID;
 
-public interface TripperRepository extends CrudRepository<Tripper, TripperId> {
+public interface TripperRepository extends CrudRepository<Tripper, UUID> {
     List<Tripper> findByTripId(UUID tripId);
 }

@@ -1,5 +1,6 @@
 package com.splitsecond.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.MoreObjects;
 
 import javax.persistence.CascadeType;
@@ -32,6 +33,7 @@ public class Trip {
     @Column(name = "end_date")
     private OffsetDateTime endDate;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, fetch =  FetchType.LAZY)
     private Set<Tripper> trippers;
 
