@@ -37,6 +37,10 @@ public class Trip {
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, fetch =  FetchType.LAZY)
     private Set<Tripper> trippers;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Expenditure> expenditures;
+
     protected Trip() {}
 
     public Trip(String name, OffsetDateTime startDate, OffsetDateTime endDate) {
@@ -79,6 +83,14 @@ public class Trip {
 
     public void setTrippers(Set<Tripper> trippers) {
         this.trippers = trippers;
+    }
+
+    public Set<Expenditure> getExpenditures() {
+        return expenditures;
+    }
+
+    public void setExpenditures(Set<Expenditure> expenditures) {
+        this.expenditures = expenditures;
     }
 
     @Override

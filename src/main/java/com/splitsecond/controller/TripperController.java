@@ -1,7 +1,7 @@
 package com.splitsecond.controller;
 
 import com.splitsecond.controller.converter.DTOToDataObjectConverter;
-import com.splitsecond.data.Trip;
+import com.splitsecond.controller.exception.TripNotFoundException;
 import com.splitsecond.data.TripRepository;
 import com.splitsecond.data.Tripper;
 import com.splitsecond.data.TripperRepository;
@@ -21,10 +21,14 @@ import java.util.UUID;
 public class TripperController {
     private final TripperRepository tripperRepository;
     private final TripRepository tripRepository;
+    private final DTOToDataObjectConverter dtoToDataObjectConverter;
 
-    TripperController(TripperRepository tripperRepository, TripRepository tripRepository) {
+    TripperController(TripperRepository tripperRepository, TripRepository tripRepository,
+                      DTOToDataObjectConverter dtoToDataObjectConverter) {
         this.tripperRepository = tripperRepository;
         this.tripRepository = tripRepository;
+        this.dtoToDataObjectConverter = dtoToDataObjectConverter;
+
     }
 
     @GetMapping("/{tripId}")
@@ -35,9 +39,7 @@ public class TripperController {
 
     @PostMapping
     Tripper createTripperForTrip(@RequestBody TripperDTO tripperDTO) {
-        Trip trip = tripRepository.findById(tripperDTO.getTripId())
-                .orElseThrow(() -> new TripNotFoundException(tripperDTO.getTripId()));
-        Tripper newTripper = DTOToDataObjectConverter.convertTripper(tripperDTO, trip);
+        Tripper newTripper = dtoToDataObjectConverter.convertTripper(tripperDTO);
         return tripperRepository.save(newTripper);
     }
 }

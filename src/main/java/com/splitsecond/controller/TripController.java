@@ -1,7 +1,10 @@
 package com.splitsecond.controller;
 
+import com.splitsecond.controller.converter.DTOToDataObjectConverter;
+import com.splitsecond.controller.exception.TripNotFoundException;
 import com.splitsecond.data.Trip;
 import com.splitsecond.data.TripRepository;
+import com.splitsecond.dto.TripDTO;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,9 +19,11 @@ import java.util.UUID;
 @RequestMapping("/trip")
 class TripController {
     private final TripRepository tripRepository;
+    private final DTOToDataObjectConverter dtoToDataObjectConverter;
 
-    TripController(TripRepository tripRepository) {
+    TripController(TripRepository tripRepository, DTOToDataObjectConverter dtoToDataObjectConverter) {
         this.tripRepository = tripRepository;
+        this.dtoToDataObjectConverter = dtoToDataObjectConverter;
     }
 
     @GetMapping("/{id}")
@@ -27,7 +32,8 @@ class TripController {
     }
 
     @PostMapping
-    Trip createTrip(@RequestBody Trip newTrip) {
+    Trip createTrip(@RequestBody TripDTO tripDTO) {
+        Trip newTrip = dtoToDataObjectConverter.convertTrip(tripDTO);
         return tripRepository.save(newTrip);
     }
 
